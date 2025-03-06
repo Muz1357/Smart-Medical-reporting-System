@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            height: 110vh; 
+        }
+        .box {
+            background-color: rgba(255, 255, 255, 0.8); /* Light background with some transparency */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px; /* Space between boxes */
+            overflow-y: auto;
+        }
+        .reports-box {
+            max-height: 300px; /* Adjust the height as needed */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .smart-band-box {
+            max-height: 200px; /* Adjust the height as needed */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .chat-link a {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Patient Dashboard</h1>
+
+        <!-- Alert Messages -->
+        {% if messages %}
+            <div class="alert alert-{{ messages.category }} alert-dismissible fade show" role="alert">
+                {{ messages.message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
+        <h2>Your Reports</h2>
+        <div class="box reports-box">
+            <ul class="list-unstyled">
+                {% for report in reports %}
+                <li>
+                    <h3>{{ report.patient_name }}</h3>
+                    <p>Type: {{ report.report_type }}</p>
+                    <p>Uploaded on: {{ report.timestamp }}</p>
+                    <a href="{{ url_for('get_report', filename=report.file_path) }}" target="_blank">View Report</a>
+                    <p class="chat-link">
+                        <a href="{{ url_for('chat', receiver_id=report.doctor_id) }}">Chat with Dr. {{ report.doctor.username }}</a>
+                    </p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2>Smart Band Data</h2>
+        <div class="box smart-band-box">
+            <ul class="list-unstyled">
+                {% for data in smart_band_data %}
+                    <li>Heart Rate: {{ data.heart_rate }} bpm, Blood Pressure: {{ data.blood_pressure }} - {{ data.timestamp }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Add buttons to start/stop simulation -->
+        <form action="{{ url_for('start_simulation_route') }}" method="post">
+            <button type="submit" class="btn btn-primary">Start Simulation</button>
+        </form>
+        <form action="{{ url_for('stop_simulation_route') }}" method="post">
+            <button type="submit" class="btn btn-danger">Stop Simulation</button>
+        </form>
+         <!-- Modal HTML -->
+        <div class="modal fade" id="simulationModal" tabindex="-1" role="dialog" aria-labelledby="simulationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="simulationModalLabel">Simulation Status</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <!-- Message will be inserted here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            document.getElementById('stop-form').addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(new FormData(this)).toString(),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('modal-body').innerText = data.message;
+                    $('#simulationModal').modal('show');
+                });
+            });
+        </script>
+        <br>
+        
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+
+    
+    
+</body>
+</html>

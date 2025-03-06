@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-WTF
+Flask-Login
+Werkzeug
+flask-migrate
+requests
+chatterbot
+from chatterbot-trainers 

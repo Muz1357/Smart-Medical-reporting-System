@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        body {
+        background-image: url("{{ url_for('static', filename='background.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 125vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        color: #ffffff;
+        padding-bottom: 5px; /* Padding to give some space at the bottom */
+        }
+
+        h1 {
+        font-size: 24px; /* Adjusted size for the title */
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 20px;
+        }
+
+        form {
+        width: 400px;
+        background-color: rgba(255, 255, 255, 0.13);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+        padding: 30px 35px;
+        text-align: center; /* Center align the contents inside the form */
+        }
+
+        form * {
+        font-family: 'Poppins', sans-serif;
+        color: rgba(248, 249, 250, 0.6);
+        letter-spacing: 0.5px;
+        outline: none;
+        border: none;
+        }
+
+        label {
+        display: block;
+        margin-top: 15px;
+        font-size: 16px;
+        font-weight: 500;
+        color: #ffffff
+        }
+
+        input[type="text"],
+        input[type="password"] {
+        display: block;
+        height: 50px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.07);
+        border-radius: 3px;
+        padding: 0 10px;
+        margin-top: 8px;
+        font-size: 14px;
+        font-weight: 300;
+        }
+
+        input[type="checkbox"] {
+        width: 12px; /* Smaller checkbox */
+        height: 12px; /* Smaller checkbox */
+        }
+
+        input[type="checkbox"] + label {
+        font-size: 14px;
+        display: inline-block;
+        margin-left: 5px;
+        padding-top: 2px;
+        }
+
+        ::placeholder {
+        color: rgba(248, 249, 250, 0.6);
+        }
+
+        .submit {
+        margin-top: 20px;
+        width: 100%;
+        background: linear-gradient(90deg, #ff8a00, #e52e71); /* Gradient background */
+        color: #ffffff; /* White text color */
+        padding: 10px 0;
+        width: 100px;
+        font-size: 20px; /* Increased font size */
+        font-weight: 600;
+        border: 2px solid #ff8a00; /* Border color to match gradient */
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, border 0.3s; 
+        text-align: center; 
+        }
+
+        .submit:hover {
+        background: #e52e71; /* Change to a solid color on hover */
+        border: 2px solid #e52e71; /* Change border to match solid color */
+        color: #ffffff; 
+        }
+
+        p {
+        text-align: center;
+        margin-top: 20px;
+        }
+
+        a {
+        color: #ffffff;
+        text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Register</h1>
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.username.label }}
+            {{ form.username() }}
+        </div>
+        <div>
+            {{ form.email.label }}
+            {{ form.email() }}
+        </div>
+        <div class>
+            {{ form.phone_number.label(class="form-control-label") }}
+            {{ form.phone_number(class="form-control form-control-lg") }}
+        </div>
+        <div>
+            {{ form.password.label }}
+            {{ form.password() }}
+        </div>
+        <div>
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password() }}
+        </div>
+        <div>
+            {{ form.submit(class_="submit") }}
+        </div>
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    </form>
+    
+</body>
+</html>

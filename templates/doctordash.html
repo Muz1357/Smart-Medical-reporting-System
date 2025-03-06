@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            height: 100vh; 
+        }
+        .box {
+            background-color: rgba(255, 255, 255, 0.8); /* Light background with some transparency */
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            max-height: 300px; /* Adjust the height as needed */
+            overflow-y: auto; /* Enable vertical scrolling */
+            margin-bottom: 20px; /* Space between boxes */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Doctor Dashboard</h1>
+        <h2>Your Reports</h2>
+        <div class="box">
+            <ul class="list-unstyled">
+                {% for report in reports %}
+                <li>
+                    <h3>{{ report.patient_name }}</h3>
+                    <p>Type: {{ report.report_type }}</p>
+                    <p>Uploaded on: {{ report.timestamp }}</p>
+                    <a href="{{ url_for('get_report', filename=report.file_path) }}" target="_blank">View Report</a>
+                    <p class="chat-link">
+                        <a href="{{ url_for('chat', receiver_id=report.user_id) }}">Chat with {{ report.patient_name }}</a>
+                    </p>
+                </li>
+                <div>
+                    <h3>{{ report.patient_name }} - {{ report.report_type }}</h3>
+                    <p>{{ report.summary }}</p>
+                    <form method="post">
+                        <input type="hidden" name="report_id" value="{{ report.id }}">
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </div>
+</body>
+</html>

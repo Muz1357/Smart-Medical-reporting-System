@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with {{ receiver.username }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='background.jpg') }}");
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
+            height: 100vh; 
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message.sent {
+            text-align: right;
+        }
+        .message.received {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chat</h1>
+        <div class="box">
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {% if message.sender_id == current_user.id %}sent{% else %}received{% endif %}">
+                        <p>{{ message.content }}</p>
+                        <small>{{ message.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+            <form method="POST">
+                <div class="form-group">
+                    <textarea class="form-control" name="message" rows="3" placeholder="Type your message here..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+        <br>
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Log out</a>
+    </div>
+</body>
+</html>
